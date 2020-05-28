@@ -7,10 +7,11 @@
 #include "Shaders.h"
 #include "Globals.h"
 #include <conio.h>
+#include <iostream>
 
 
 Shaders		myShaders;
-Vertex		verticesData[3];
+Vertex		verticesData[6];
 GLuint		vboId;
 
 int Init( ESContext *esContext )
@@ -21,16 +22,15 @@ int Init( ESContext *esContext )
 	verticesData[0].pos = Vector3(  -0.5,  0.5,  0.0 );
 	verticesData[1].pos = Vector3( 0.5, 0.5,  0.0 );
 	verticesData[2].pos = Vector3(  0.5, -0.5,  0.0 );
-	//verticesData[3].pos = Vector3(  -0.5,  0.5,  0.0 );
-	//verticesData[4].pos = Vector3( -0.5, -0.5,  0.0 );
-	//verticesData[5].pos = Vector3(  0.5, -0.5,  0.0 );
+	verticesData[3].pos = Vector3(  -0.5,  0.5,  0.0 );
+	verticesData[4].pos = Vector3( -0.5, -0.5,  0.0 );
+	verticesData[5].pos = Vector3(  0.5, -0.5,  0.0 );
 
 
 	glGenBuffers(1, &vboId);
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesData), verticesData, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 
 	//creation of shaders and program 
 	myShaders.Init( "../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs" );
@@ -45,14 +45,15 @@ void Draw( ESContext *esContext )
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
 	if( myShaders.GetAttributes().position != -1 )
-	{
+	{	
 		glEnableVertexAttribArray( myShaders.GetAttributes().position );
-		glVertexAttribPointer( myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), &verticesData );
+		glVertexAttribPointer( myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE,  sizeof(Vertex), 0);
+		//glDrawArrays( GL_TRIANGLES, 0, 3 );
+		//glDrawArrays( GL_TRIANGLES, 0, 3 );
 	}
-
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-	//glDrawArrays( GL_TRIANGLES, 3, 3 );
-
+	glDrawArrays( GL_TRIANGLES, 0, 3 );
+	glDrawArrays( GL_TRIANGLES, 3, 3 );
+	
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	eglSwapBuffers( esContext->eglDisplay, esContext->eglSurface );
 }
