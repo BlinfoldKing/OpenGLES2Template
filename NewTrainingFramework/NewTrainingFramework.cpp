@@ -13,6 +13,7 @@
 Shaders		myShaders;
 Vertex		verticesData[6];
 GLuint		vboId;
+GLuint		iboId;
 
 int Init( ESContext *esContext )
 {
@@ -32,6 +33,12 @@ int Init( ESContext *esContext )
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesData), verticesData, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	GLuint idxs[6] = {0, 1, 2, 3, 4, 5};
+	glGenBuffers(1, &iboId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(verticesData), idxs, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 	//creation of shaders and program 
 	myShaders.Init( "../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs" );
 	return 0;
@@ -48,13 +55,14 @@ void Draw( ESContext *esContext )
 	{	
 		glEnableVertexAttribArray( myShaders.GetAttributes().position );
 		glVertexAttribPointer( myShaders.GetAttributes().position, 3, GL_FLOAT, GL_FALSE,  sizeof(Vertex), 0);
-		//glDrawArrays( GL_TRIANGLES, 0, 3 );
-		//glDrawArrays( GL_TRIANGLES, 0, 3 );
 	}
-	glDrawArrays( GL_TRIANGLES, 0, 3 );
-	glDrawArrays( GL_TRIANGLES, 3, 3 );
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (char*) 0 + sizeof(Vector3));
 	
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	eglSwapBuffers( esContext->eglDisplay, esContext->eglSurface );
 }
 
