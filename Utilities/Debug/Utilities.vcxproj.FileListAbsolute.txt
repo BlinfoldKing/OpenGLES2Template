@@ -1,0 +1,2 @@
+C:\Users\ganes\project\OpenGLES2Template\Debug\Utilities.pdb
+C:\Users\ganes\project\OpenGLES2Template\Utilities\Debug\Utilities.pdb
