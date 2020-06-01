@@ -7,37 +7,91 @@
 #include "Shaders.h"
 #include "Globals.h"
 #include <conio.h>
-#include <iostream>
 
 
 Shaders		myShaders;
-Vertex		verticesData[6];
+Vertex		rect[4];
 GLuint		vboId;
 GLuint		iboId;
+
+void InitRect()
+{
+	//rect data
+	rect[0].pos = Vector3(-0.5, 0.5, 0.0);
+	rect[1].pos = Vector3(0.5, 0.5, 0.0);
+	rect[2].pos = Vector3(0.5, -0.5, 0.0);
+	rect[3].pos = Vector3(-0.5, -0.5, 0.0);
+
+
+	glGenBuffers(1, &vboId);
+	glBindBuffer(GL_ARRAY_BUFFER, vboId);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	int indices[6] = { 0, 1, 2, 3, 2, 0 };
+	glGenBuffers(1, &iboId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rect), indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
 
 int Init( ESContext *esContext )
 {
 	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
-	//triangle data
-	verticesData[0].pos = Vector3(  -0.5,  0.5,  0.0 );
-	verticesData[1].pos = Vector3( 0.5, 0.5,  0.0 );
-	verticesData[2].pos = Vector3(  0.5, -0.5,  0.0 );
-	verticesData[3].pos = Vector3(  -0.5,  0.5,  0.0 );
-	verticesData[4].pos = Vector3( -0.5, -0.5,  0.0 );
-	verticesData[5].pos = Vector3(  0.5, -0.5,  0.0 );
+	char* path = "c:\\\\Users\\ganes\\project\\OpenGLES2Template\\Resources\\Models\\Woman1.nfg";
+	FILE* file = fopen(path, "r");
+	if (file == NULL) {
+		printf(path);
+		printf("Impossible to open the file !\n");
+		return false;
+	}
+	else {
+		int NrVertices;
+		fscanf_s(file, "NrVertices: %d", &NrVertices);
+		Vertex* verticesData = new Vertex[NrVertices];
 
+		printf("%d\n", NrVertices);
+		char* format = " %*d. pos:[%f, %f, %f]; norm:[%f, %f, %f]; binorm: [%f, %f, %f] ; tgt: [%f, %f, %f] ; uv: [%f, %f];\n";
+		for (int i = 0; i < NrVertices; i++) {
+			Vertex v;
+			fscanf_s(file, format,
+				&v.pos.x, &v.pos.y, &v.pos.z,
+				&v.norm.x, &v.norm.y, &v.norm.z,
+				&v.binorm.x, &v.binorm.y, &v.binorm.z,
+				&v.tgt.x, &v.tgt.y, &v.tgt.z,
+				&v.uv.x, &v.uv.y
+			);
+			verticesData[i] = v;
+		}
 
-	glGenBuffers(1, &vboId);
-	glBindBuffer(GL_ARRAY_BUFFER, vboId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesData), verticesData, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		printf("%f %f %f", verticesData[0].pos.x, verticesData[1].pos.x, verticesData[2].pos.x);
+		glGenBuffers(1, &vboId);
+		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(verticesData), verticesData, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	GLuint idxs[6] = {0, 1, 2, 3, 4, 5};
-	glGenBuffers(1, &iboId);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(verticesData), idxs, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		int NrIndices;
+		fscanf_s(file, "NrIndices: %d", &NrIndices);
+		printf("%d\n", NrIndices);
+		int* indicesdData = new int[NrIndices];
+		format = "   %*d.    %d,    %d,    %d";
+		for (int i = 0; i < NrIndices; i += 3) {
+			fscanf_s(file, format,
+				&indicesdData[i],
+				&indicesdData[i + 1],
+				&indicesdData[i + 2]
+			);
+		}
+
+		glGenBuffers(1, &iboId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(verticesData), indicesdData, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	}
+
+	InitRect();
 
 	//creation of shaders and program 
 	myShaders.Init( "../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs" );
