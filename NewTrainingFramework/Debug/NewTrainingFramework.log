@@ -1,4 +1,4 @@
 ﻿cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
-  NewTrainingFramework.cpp
-C:\Users\ganes\project\OpenGLES2Template\NewTrainingFramework\NewTrainingFramework.cpp(43,15): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Model.cpp
+C:\Users\ganes\project\OpenGLES2Template\NewTrainingFramework\Model.cpp(20,15): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   NewTrainingFramework.vcxproj -> C:\Users\ganes\project\OpenGLES2Template\\BIN\NewTrainingFramework.exe
