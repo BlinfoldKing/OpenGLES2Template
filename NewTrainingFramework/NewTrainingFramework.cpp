@@ -8,7 +8,6 @@
 #include "Globals.h"
 #include <conio.h>
 
-
 Shaders			myShaders;
 Model*			model;
 Rect*			rect;
@@ -22,6 +21,8 @@ int Init( ESContext *esContext )
 	
 	model = new Model();
 	model->initModel(path);
+	model->texture.InitTexture("../Resources/Textures/Woman1.tga");
+	model->shader.Init("../Resources/Shaders/ModelShaderVS.vs", "../Resources/Shaders/ModelShaderFS.fs");
 
 	Vector3 positions[4] = {
 		Vector3(-0.5, 0.5, 0.0),
@@ -41,11 +42,10 @@ int Init( ESContext *esContext )
 void Draw( ESContext *esContext )
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glUseProgram( myShaders.GetProgram() );
 
-	model->draw(myShaders);
-	rect->draw(myShaders);
+	model->draw();
+	// rect->draw(myShaders);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
