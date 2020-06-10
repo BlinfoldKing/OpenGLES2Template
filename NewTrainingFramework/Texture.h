@@ -5,7 +5,7 @@ class Texture
 {
 public:
 	GLuint textureID;
-	char* data;
+	char* data = '\0';
 	int width, height, bpp;
 	Texture();
 	~Texture();

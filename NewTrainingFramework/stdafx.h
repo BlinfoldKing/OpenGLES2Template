@@ -13,5 +13,6 @@
 #include "Model.h"
 #include "Rectangle.h"
 #include "Object3D.h"
+#include "Camera.h"
 
 // TODO: reference additional headers your program requires here

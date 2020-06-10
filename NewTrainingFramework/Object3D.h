@@ -19,13 +19,15 @@ public:
    
     Transform transform;
     Object3D();
-    ~Object3D();
+    virtual ~Object3D();
 
     void SetModel(char* path);
     void SetTexture(char* path);
     void SetShader(char* vertexpath, char* fragmentpath);
-     
-    void draw();
+ 
+    Model* GetModel();
+    Texture* GetTexture();
+    Shaders* GetShader();
     
     Matrix GetWorldMatrix();
 };

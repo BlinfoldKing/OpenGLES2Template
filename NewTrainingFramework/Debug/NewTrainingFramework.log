@@ -1,4 +1,17 @@
 ﻿cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  stdafx.cpp
+C:\Users\ganes\project\OpenGLES2Template\NewTrainingFramework\Rectangle.h(2,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\ganes\project\OpenGLES2Template\NewTrainingFramework\Rectangle.h(3,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Texture.cpp
+  Shaders.cpp
+  Rectangle.cpp
+  Object3D.cpp
+C:\Users\ganes\project\OpenGLES2Template\NewTrainingFramework\Object3D.cpp(62,9): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 1 has type 'Matrix'
   NewTrainingFramework.cpp
-C:\Users\ganes\project\OpenGLES2Template\NewTrainingFramework\NewTrainingFramework.cpp(37,49): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\ganes\project\OpenGLES2Template\NewTrainingFramework\NewTrainingFramework.cpp(38,49): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+  Model.cpp
+C:\Users\ganes\project\OpenGLES2Template\NewTrainingFramework\Model.cpp(20,15): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Camera.cpp
+  Generating Code...
   NewTrainingFramework.vcxproj -> C:\Users\ganes\project\OpenGLES2Template\\BIN\NewTrainingFramework.exe

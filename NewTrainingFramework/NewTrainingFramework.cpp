@@ -9,6 +9,7 @@
 #include <conio.h>
 
 Shaders			myShaders;
+Camera*			camera;
 Object3D*		woman1;
 Object3D*		woman2;
 Rect*			rect;
@@ -46,15 +47,17 @@ int Init( ESContext *esContext )
 	woman2->transform.scale = Vector3(0.5, 0.5, 0.5);
 
 
-	Vector3 positions[4] = {
-		Vector3(-0.5, 0.5, 0.0),
-		Vector3(0.5, 0.5, 0.0),
-		Vector3(0.5, -0.5, 0.0),
-		Vector3(-0.5, -0.5, 0.0)
-	};
+//	Vector3 positions[4] = {
+//		Vector3(-0.5, 0.5, 0.0),
+//		Vector3(0.5, 0.5, 0.0),
+//		Vector3(0.5, -0.5, 0.0),
+//		Vector3(-0.5, -0.5, 0.0)
+//	};
 	
-	rect = new Rect();
-	rect->initVertices(positions);
+	//rect = new Rect();
+	//rect->initVertices(positions);
+
+	camera = new Camera();
 
 	//creation of shaders and program 
 	myShaders.Init( "../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs" );
@@ -66,8 +69,8 @@ void Draw( ESContext *esContext )
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram( myShaders.GetProgram() );
 
-	woman1->draw();
-	woman2->draw();
+	camera->draw(woman1);
+	camera->draw(woman2);
 	//rect->draw(myShaders);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -91,7 +94,7 @@ void CleanUp()
 	//Cleaning up the buffers
 	delete woman1;
 	delete woman2;
-	delete rect;
+	delete camera;
 }
 
 int _tmain( int argc, _TCHAR* argv[] )

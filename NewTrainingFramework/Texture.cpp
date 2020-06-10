@@ -9,7 +9,7 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-	delete data;
+	if ((this->data != NULL) && (this->data[0] != '\0')) delete this->data;
 }
 
 void Texture::init(char* filename)
