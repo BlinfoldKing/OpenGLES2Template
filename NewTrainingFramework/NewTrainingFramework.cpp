@@ -33,6 +33,7 @@ int Init( ESContext *esContext )
 	woman1->SetShader(vertexpath, fragmentpath);
 	woman1->transform.position.x = -0.5;
 	woman1->transform.position.y = -0.5;
+	woman1->transform.position.z = -0.5;
 	woman1->transform.scale = Vector3(0.6, 0.6, 0.6);
 
 	woman2 = new Object3D();
@@ -41,6 +42,7 @@ int Init( ESContext *esContext )
 	woman2->SetShader(vertexpath, fragmentpath);
 	woman2->transform.position.x = 0.5;
 	woman2->transform.position.y = -0.5;
+	woman2->transform.position.z = 0.5;
 	woman2->transform.scale = Vector3(0.5, 0.5, 0.5);
 
 
