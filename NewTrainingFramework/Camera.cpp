@@ -11,18 +11,18 @@ Matrix Camera::GetViewMatrix() {
 	view.SetIdentity();
 
 	translate.SetIdentity();
-	translate.SetTranslation(-this->transform.position);
+	translate.SetTranslation(this->transform.position * -1);
 	
 	rotz.SetIdentity();
-	rotz.SetRotationZ(-this->transform.rotation.z);
+	rotz.SetRotationZ(-1 * this->transform.rotation.z);
 	rotx.SetIdentity();
-	rotx.SetRotationX(-this->transform.rotation.x);
+	rotx.SetRotationX(-1 * this->transform.rotation.x);
 	roty.SetIdentity();
-	roty.SetRotationY(-this->transform.rotation.y);
+	roty.SetRotationY(-1 * this->transform.rotation.y);
 
 
 
-	view = view * translate * roty * rotx * rotz;
+	view = translate * roty * rotx * rotz;
 	return view;
 }
 
@@ -44,7 +44,11 @@ void Camera::draw(Object3D* object)
 {
 	glUseProgram(object->GetShader()->GetProgram());
 
-	Matrix world = object->GetWorldMatrix() * this->GetProjectionMatrix() * this->GetViewMatrix();
+
+	Matrix world;
+	world.SetIdentity();
+	world = object->GetWorldMatrix() * this->GetViewMatrix() * this->GetProjectionMatrix();
+	//world = object->GetWorldMatrix();
 
 	if (object->GetShader()->GetUniforms().wvp_matrix != -1) {
 		glUniformMatrix4fv(object->GetShader()->GetUniforms().wvp_matrix, 1, GL_FALSE, world.m[0]);

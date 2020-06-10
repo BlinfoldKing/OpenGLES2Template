@@ -58,7 +58,7 @@ Matrix Object3D::GetWorldMatrix() {
 	roty.SetIdentity();
 	roty.SetRotationY(this->transform.rotation.y);
 
-	world = scale * rotz * rotx * roty * translate;
+	world = world * scale * rotz * rotx * roty * translate;
 	return world;
 }
 

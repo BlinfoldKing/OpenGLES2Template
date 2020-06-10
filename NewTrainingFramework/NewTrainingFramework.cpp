@@ -85,7 +85,14 @@ void Update( ESContext *esContext, float deltaTime )
 {
 	woman1->transform.rotation.y += deltaTime;
 	woman2->transform.rotation.z += deltaTime;
-	camera->transform.position += Vector3(camdir.x * deltaTime, camdir.y * deltaTime, camdir.z * deltaTime);
+	Vector4 dir;
+
+	dir.x = camdir.x * deltaTime;
+	dir.y = camdir.y * deltaTime;
+	dir.z = camdir.z * deltaTime;
+	dir = dir * camera->GetWorldMatrix();
+	printf("%f %f %f %f\n", dir.x, dir.y, dir.z, dir.w);
+	camera->transform.position += Vector3(dir.x, dir.y, dir.z);
 	camera->transform.rotation += Vector3(camrot.x * deltaTime, camrot.y * deltaTime, camrot.z * deltaTime);
 }
 
@@ -97,28 +104,28 @@ void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
 		printf("%c\n", key);
 		switch (key) {
 		case 'W':
-			dir.z = 1;
+			dir.z = -1;
 			break;
 		case 'A':
 			dir.x = -1;
 			break;
 		case 'S':
-			dir.z = -1;
+			dir.z = 1;
 			break;
 		case 'D':
 			dir.x = 1;
 			break;
 		case 37:
-			rot.y = -1;
-			break;
-		case 38:
-			rot.x = -1;
-			break;
-		case 39:
 			rot.y = 1;
 			break;
-		case 40:
+		case 38:
 			rot.x = 1;
+			break;
+		case 39:
+			rot.y = -1;
+			break;
+		case 40:
+			rot.x = -1;
 			break;
 		}
 	}
