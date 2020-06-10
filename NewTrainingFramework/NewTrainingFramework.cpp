@@ -10,7 +10,7 @@
 
 Shaders			myShaders;
 Object3D*		woman1;
-Model*			model2;
+Object3D*		woman2;
 Rect*			rect;
 
 int Init( ESContext *esContext )
@@ -20,6 +20,9 @@ int Init( ESContext *esContext )
 	
 	char* woman1model = "../Resources/Models/Woman1.nfg";
 	char* woman1text = "../Resources/Textures/Woman1.tga";
+	
+	char* woman2model = "../Resources/Models/Woman2.nfg";
+	char* woman2text = "../Resources/Textures/Woman2.tga";
 
 	char* vertexpath = "../Resources/Shaders/ModelShaderVS.vs";
 	char* fragmentpath = "../Resources/Shaders/ModelShaderFS.fs";
@@ -28,13 +31,17 @@ int Init( ESContext *esContext )
 	woman1->SetModel(woman1model);
 	woman1->SetTexture(woman1text);
 	woman1->SetShader(vertexpath, fragmentpath);
-	woman1->transform.position.y = -1;
+	woman1->transform.position.x = -0.5;
+	woman1->transform.position.y = -0.5;
+	woman1->transform.scale = Vector3(0.5, 0.5, 0.5);
 
-
-//	model2 = new Model(Vector3(1, -1, 0));
-//	model2->initModel(path2);
-//	model2->texture.InitTexture("../Resources/Textures/Woman2.tga");
-//	model2->shader.Init("../Resources/Shaders/ModelShaderVS.vs", "../Resources/Shaders/ModelShaderFS.fs");
+	woman2 = new Object3D();
+	woman2->SetModel(woman2model);
+	woman2->SetTexture(woman2text);
+	woman2->SetShader(vertexpath, fragmentpath);
+	woman2->transform.position.x = 0.5;
+	woman2->transform.position.y = -0.5;
+	woman2->transform.scale = Vector3(0.5, 0.5, 0.5);
 
 
 	Vector3 positions[4] = {
@@ -58,6 +65,7 @@ void Draw( ESContext *esContext )
 	glUseProgram( myShaders.GetProgram() );
 
 	woman1->draw();
+	woman2->draw();
 	//rect->draw(myShaders);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -79,6 +87,7 @@ void CleanUp()
 {
 	//Cleaning up the buffers
 	delete woman1;
+	delete woman2;
 	delete rect;
 }
 

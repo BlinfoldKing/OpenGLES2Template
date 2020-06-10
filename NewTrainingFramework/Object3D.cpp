@@ -6,6 +6,8 @@ Object3D::Object3D() {
 	this->texture = new Texture();
 	this->shader = new Shaders();
 	this->transform.scale = Vector3(1, 1, 1);
+	this->transform.position = Vector3(0, 0, 0);
+	this->transform.rotation = Vector3(0, 0, 0);
 }
 
 Object3D::~Object3D() {
@@ -30,14 +32,19 @@ Matrix Object3D::GetWorldMatrix() {
 	Matrix world, scale, rotz, rotx, roty, translate;
 
 	world.SetIdentity();
+	
 	scale.SetIdentity();
-
-	rotz.SetRotationZ(this->transform.rotation.z);
-	rotx.SetRotationX(this->transform.rotation.x);
-	roty.SetRotationY(this->transform.rotation.y);
-
+	scale.SetScale(this->transform.scale);
+	
+	translate.SetIdentity();
 	translate.SetTranslation(this->transform.position);
-	translate.SetScale(this->transform.scale);
+	
+	rotz.SetIdentity();
+	rotz.SetRotationZ(this->transform.rotation.z);
+	rotx.SetIdentity();
+	rotx.SetRotationX(this->transform.rotation.x);
+	roty.SetIdentity();
+	roty.SetRotationY(this->transform.rotation.y);
 
 	world = scale * rotz * rotx * roty * translate;
 	return world;
@@ -50,7 +57,6 @@ void Object3D::draw()
 	Matrix world = this->GetWorldMatrix();
 
 	if (this->shader->GetUniforms().mvp_matrix != -1) {
-		printf("mvp\n");
 		glUniformMatrix4fv(this->shader->GetUniforms().mvp_matrix, 1, GL_FALSE, world.m[0]);
 	}
 
