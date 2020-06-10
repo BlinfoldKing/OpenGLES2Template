@@ -75,7 +75,7 @@ void Draw( ESContext *esContext )
 
 void Update( ESContext *esContext, float deltaTime )
 {
-
+	woman1->transform.rotation.y += deltaTime;
 }
 
 void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
