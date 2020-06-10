@@ -7,12 +7,13 @@ public:
 	struct Attributes
 	{
 		GLint position;
+		GLint textureCoord;
 	};
 
 	struct Uniforms
 	{
 		GLint texture;
-		GLint textureCoord;
+		GLint mvp_matrix;
 	};
 
 private:

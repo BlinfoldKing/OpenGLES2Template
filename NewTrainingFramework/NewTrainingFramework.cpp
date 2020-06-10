@@ -9,7 +9,8 @@
 #include <conio.h>
 
 Shaders			myShaders;
-Model*			model;
+Object3D*		woman1;
+Model*			model2;
 Rect*			rect;
 
 int Init( ESContext *esContext )
@@ -17,12 +18,24 @@ int Init( ESContext *esContext )
 	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 	glEnable(GL_DEPTH_TEST);
 	
-	char* path = "../Resources/Models/Woman1.nfg";
-	
-	model = new Model();
-	model->initModel(path);
-	model->texture.InitTexture("../Resources/Textures/Woman1.tga");
-	model->shader.Init("../Resources/Shaders/ModelShaderVS.vs", "../Resources/Shaders/ModelShaderFS.fs");
+	char* woman1model = "../Resources/Models/Woman1.nfg";
+	char* woman1text = "../Resources/Textures/Woman1.tga";
+
+	char* vertexpath = "../Resources/Shaders/ModelShaderVS.vs";
+	char* fragmentpath = "../Resources/Shaders/ModelShaderFS.fs";
+
+	woman1 = new Object3D();
+	woman1->SetModel(woman1model);
+	woman1->SetTexture(woman1text);
+	woman1->SetShader(vertexpath, fragmentpath);
+	woman1->transform.position.y = -1;
+
+
+//	model2 = new Model(Vector3(1, -1, 0));
+//	model2->initModel(path2);
+//	model2->texture.InitTexture("../Resources/Textures/Woman2.tga");
+//	model2->shader.Init("../Resources/Shaders/ModelShaderVS.vs", "../Resources/Shaders/ModelShaderFS.fs");
+
 
 	Vector3 positions[4] = {
 		Vector3(-0.5, 0.5, 0.0),
@@ -44,8 +57,8 @@ void Draw( ESContext *esContext )
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram( myShaders.GetProgram() );
 
-	model->draw();
-	// rect->draw(myShaders);
+	woman1->draw();
+	//rect->draw(myShaders);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -65,7 +78,7 @@ void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
 void CleanUp()
 {
 	//Cleaning up the buffers
-	delete model;
+	delete woman1;
 	delete rect;
 }
 

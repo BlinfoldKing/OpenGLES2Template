@@ -1,4 +1,4 @@
-#include <stdafx.h>
+#include "stdafx.h"
 #include "Shaders.h"
 
 int Shaders::Init( char * fileVertexShader, char * fileFragmentShader )
@@ -22,10 +22,11 @@ int Shaders::Init( char * fileVertexShader, char * fileFragmentShader )
 
 	//finding location of attributes
 	m_attributes.position = glGetAttribLocation( m_program, "a_posL" );
+	m_attributes.textureCoord = glGetAttribLocation(m_program, "a_uv");
 
 	//finding location of uniforms
-	m_uniforms.texture = glGetAttribLocation(m_program, "u_texture");
-	m_uniforms.textureCoord = glGetAttribLocation(m_program, "a_uv");
+	m_uniforms.texture = glGetUniformLocation(m_program, "u_texture");
+	m_uniforms.mvp_matrix = glGetUniformLocation(m_program, "u_world");
 
 	return 0;
 }

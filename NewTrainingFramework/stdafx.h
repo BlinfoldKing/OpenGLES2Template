@@ -12,5 +12,6 @@
 
 #include "Model.h"
 #include "Rectangle.h"
+#include "Object3D.h"
 
 // TODO: reference additional headers your program requires here

@@ -9,6 +9,6 @@ public:
 	int width, height, bpp;
 	Texture();
 	~Texture();
-	void InitTexture(char* filename);
+	void init(char* filename);
 };
 

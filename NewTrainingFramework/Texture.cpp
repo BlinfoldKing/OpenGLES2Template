@@ -12,7 +12,7 @@ Texture::~Texture()
 	delete data;
 }
 
-void Texture::InitTexture(char* filename)
+void Texture::init(char* filename)
 {
 	// Bind and load Texture data
 	glBindTexture(GL_TEXTURE_2D, textureID);

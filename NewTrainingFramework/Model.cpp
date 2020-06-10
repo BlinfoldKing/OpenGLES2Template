@@ -15,7 +15,7 @@ Model::~Model()
 	glDeleteBuffers(1, &this->m_IBO);
 }
 
-void Model::initModel(char* filename) 
+void Model::init(char* filename) 
 {
 	FILE* file = fopen(filename, "r");
 	if (file == NULL) {
@@ -87,29 +87,3 @@ void Model::initModel(char* filename)
 	fclose(file);
 }
 
-void Model::draw() 
-{
-	glUseProgram(this->shader.GetProgram());
-
-	glBindBuffer(GL_ARRAY_BUFFER, this->m_VBO);
-	if( this->shader.GetAttributes().position != -1 )
-	{	
-		glEnableVertexAttribArray( this->shader.GetAttributes().position );
-		glVertexAttribPointer( this->shader.GetAttributes().position, 3, GL_FLOAT, GL_FALSE,  sizeof(Vertex), 0);
-	}
-
-	glBindTexture(GL_TEXTURE_2D, this->texture.textureID);
-	glUniform1i(this->shader.GetUniforms().texture, 0);
-	if (this->shader.GetUniforms().textureCoord != -1)
-	{
-		glEnableVertexAttribArray(this->shader.GetUniforms().textureCoord);
-		glVertexAttribPointer(this->shader.GetUniforms().textureCoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + sizeof(Vector3));
-	}
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->m_IBO);
-	glDrawElements(GL_TRIANGLES, this->m_indicesCount, GL_UNSIGNED_INT, 0);
-	
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
