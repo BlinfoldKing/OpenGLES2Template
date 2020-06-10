@@ -6,7 +6,9 @@ Camera::Camera(): Object3D() {}
 Camera::~Camera() {}
 
 Matrix Camera::GetViewMatrix() {
-	Matrix translate, rotz, rotx, roty;
+	Matrix view, translate, rotz, rotx, roty;
+
+	view.SetIdentity();
 
 	translate.SetIdentity();
 	translate.SetTranslation(-this->transform.position);
@@ -20,7 +22,7 @@ Matrix Camera::GetViewMatrix() {
 
 
 
-	Matrix view = translate * roty * rotx * rotz;
+	view = view * translate * roty * rotx * rotz;
 	return view;
 }
 
@@ -44,8 +46,8 @@ void Camera::draw(Object3D* object)
 
 	Matrix world = object->GetWorldMatrix() * this->GetProjectionMatrix() * this->GetViewMatrix();
 
-	if (object->GetShader()->GetUniforms().mvp_matrix != -1) {
-		glUniformMatrix4fv(object->GetShader()->GetUniforms().mvp_matrix, 1, GL_FALSE, world.m[0]);
+	if (object->GetShader()->GetUniforms().wvp_matrix != -1) {
+		glUniformMatrix4fv(object->GetShader()->GetUniforms().wvp_matrix, 1, GL_FALSE, world.m[0]);
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, object->GetModel()->m_VBO);

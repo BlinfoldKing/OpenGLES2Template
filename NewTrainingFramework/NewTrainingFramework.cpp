@@ -14,6 +14,9 @@ Object3D*		woman1;
 Object3D*		woman2;
 Rect*			rect;
 
+Vector3 camdir;
+Vector3 camrot;
+
 int Init( ESContext *esContext )
 {
 	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
@@ -82,11 +85,46 @@ void Update( ESContext *esContext, float deltaTime )
 {
 	woman1->transform.rotation.y += deltaTime;
 	woman2->transform.rotation.z += deltaTime;
+	camera->transform.position += Vector3(camdir.x * deltaTime, camdir.y * deltaTime, camdir.z * deltaTime);
+	camera->transform.rotation += Vector3(camrot.x * deltaTime, camrot.y * deltaTime, camrot.z * deltaTime);
 }
 
 void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
 {
+	Vector3 dir = Vector3(0, 0, 0);
+	Vector3 rot = Vector3(0, 0, 0);
+	if (bIsPressed) {
+		printf("%c\n", key);
+		switch (key) {
+		case 'W':
+			dir.z = 1;
+			break;
+		case 'A':
+			dir.x = -1;
+			break;
+		case 'S':
+			dir.z = -1;
+			break;
+		case 'D':
+			dir.x = 1;
+			break;
+		case 37:
+			rot.y = -1;
+			break;
+		case 38:
+			rot.x = -1;
+			break;
+		case 39:
+			rot.y = 1;
+			break;
+		case 40:
+			rot.x = 1;
+			break;
+		}
+	}
 
+	camrot = rot;
+	camdir = dir;
 }
 
 void CleanUp()

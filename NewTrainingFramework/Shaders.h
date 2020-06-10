@@ -13,7 +13,7 @@ public:
 	struct Uniforms
 	{
 		GLint texture;
-		GLint mvp_matrix;
+		GLint wvp_matrix;
 	};
 
 private:
