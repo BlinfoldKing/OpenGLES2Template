@@ -45,6 +45,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Globals.h">
@@ -77,6 +80,9 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shaders\TriangleShaderFS.fs">
@@ -86,11 +92,13 @@
       <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Readme.doc" />
-    <None Include="..\Resources\Shaders\ModelShaderFS.fs">
-      <Filter>Resources\Shaders</Filter>
-    </None>
     <None Include="..\Resources\Shaders\ModelShaderVS.vs">
       <Filter>Resources\Shaders</Filter>
     </None>
+    <None Include="..\Resources\Shaders\DebugShader.vs" />
+    <None Include="..\Resources\Shaders\DebugShader.fs" />
+    <None Include="..\Resources\Shaders\ModelShaderFS.fs" />
+    <None Include="..\Resources\Shaders\CubeShader.fs" />
+    <None Include="..\Resources\Shaders\CubeShader.vs" />
   </ItemGroup>
 </Project>

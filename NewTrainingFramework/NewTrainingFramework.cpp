@@ -13,9 +13,7 @@ Camera*			camera;
 Object3D*		woman1;
 Object3D*		woman2;
 Rect*			rect;
-
-Vector3 camdir;
-Vector3 camrot;
+int scene = 1;
 
 int Init( ESContext *esContext )
 {
@@ -30,6 +28,10 @@ int Init( ESContext *esContext )
 
 	char* vertexpath = "../Resources/Shaders/ModelShaderVS.vs";
 	char* fragmentpath = "../Resources/Shaders/ModelShaderFS.fs";
+	
+	char* debugvertexpath = "../Resources/Shaders/DebugShader.vs";
+	char* debugfragmentpath = "../Resources/Shaders/DebugShader.fs";
+
 
 	woman1 = new Object3D();
 	woman1->SetModel(woman1model);
@@ -49,6 +51,24 @@ int Init( ESContext *esContext )
 	woman2->transform.position.z = 0.5;
 	woman2->transform.scale = Vector3(0.5, 0.5, 0.5);
 
+	camera = new Camera();
+	camera->skybox = new SkyBox();
+	
+	char* skyboxpaths[6] = {
+		"../Resources/Textures/SkyBox_Right.tga",
+		"../Resources/Textures/SkyBox_Left.tga",
+		"../Resources/Textures/SkyBox_Top.tga",
+		"../Resources/Textures/SkyBox_Bottom.tga",
+		"../Resources/Textures/SkyBox_Front.tga",
+		"../Resources/Textures/SkyBox_Back.tga",
+	};
+	char* cubeVertex = "../Resources/Shaders/CubeShader.vs";
+	char* cubeFragment = "../Resources/Shaders/CubeShader.fs";
+	char* skyboxModel = "../Resources/Models/SkyBox.nfg";
+
+	camera->skybox->LoadSkyboxTextures(skyboxpaths);
+	camera->skybox->SetModel(skyboxModel);
+	camera->skybox->SetShader(cubeVertex, cubeFragment);
 
 //	Vector3 positions[4] = {
 //		Vector3(-0.5, 0.5, 0.0),
@@ -60,24 +80,29 @@ int Init( ESContext *esContext )
 	//rect = new Rect();
 	//rect->initVertices(positions);
 
-	camera = new Camera();
 
 	//creation of shaders and program 
-	myShaders.Init( "../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs" );
+//	myShaders.Init( "../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs" );
 	return 0;
 }
 
 void Draw( ESContext *esContext )
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram( myShaders.GetProgram() );
 
-	camera->draw(woman1);
-	camera->draw(woman2);
-	//rect->draw(myShaders);
+	camera->drawSkybox();
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	switch (scene)
+	{
+	case 1:
+		camera->draw(woman1);
+		camera->draw(woman2);
+		break;
+	default:
+		break;
+	}
+//rect->draw(myShaders);
+
 	eglSwapBuffers( esContext->eglDisplay, esContext->eglSurface );
 }
 
@@ -85,65 +110,16 @@ void Update( ESContext *esContext, float deltaTime )
 {
 	woman1->transform.rotation.y += deltaTime;
 	woman2->transform.rotation.z += deltaTime;
-	Vector4 dir;
-
-	dir.x = camdir.x * deltaTime;
-	dir.y = camdir.y * deltaTime;
-	dir.z = camdir.z * deltaTime;
-	dir = dir * camera->GetWorldMatrix();
-	
-	camera->transform.position += Vector3(dir.x, dir.y, dir.z);
-	camera->transform.rotation += Vector3(camrot.x * deltaTime, camrot.y * deltaTime, camrot.z * deltaTime);
+	camera->update(deltaTime);
 }
 
 void Key( ESContext *esContext, unsigned char key, bool bIsPressed )
 {
-	Vector3 dir = camdir;
-	Vector3 rot = camrot;
 	if (bIsPressed) {
-		printf("%c\n", key);
-		switch (key) {
-		case 'W':
-			dir.z = -1;
-			dir.x = 0;
-			break;
-		case 'A':
-			dir.x = -1;
-			dir.z = 0;
-			break;
-		case 'S':
-			dir.z = 1;
-			dir.x = 0;
-			break;
-		case 'D':
-			dir.x = 1;
-			dir.z = 0;
-			break;
-		case 37:
-			rot.y = 1;
-			rot.x = 0;
-			break;
-		case 38:
-			rot.x = 1;
-			rot.y = 0;
-			break;
-		case 39:
-			rot.y = -1;
-			rot.x = 0;
-			break;
-		case 40:
-			rot.x = -1;
-			rot.y = 0;
-			break;
+		if (key >= '1' && key <= '9') {
+			scene = (int)key - '0';
 		}
 	}
-	else {
-		rot = Vector3(0, 0, 0);
-		dir = Vector3(0, 0, 0);
-	}
-
-	camrot = rot;
-	camdir = dir;
 }
 
 void CleanUp()

@@ -11,9 +11,9 @@ Object3D::Object3D() {
 }
 
 Object3D::~Object3D() {
-	if (this->model) delete this->model;
-	if (this->texture) delete this->texture;
-	if (this->shader) delete this->shader;
+	delete this->model;
+	delete this->texture;
+	delete this->shader;
 }
 
 void Object3D::SetModel(char* path) {
@@ -21,7 +21,7 @@ void Object3D::SetModel(char* path) {
 }
 
 void Object3D::SetTexture(char* path) {
-	this->texture->init(path);
+	this->texture->load(path);
 }
 
 void Object3D::SetShader(char* vertexpath, char* fragmentpath) {

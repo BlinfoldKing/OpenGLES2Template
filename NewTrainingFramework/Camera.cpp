@@ -40,10 +40,41 @@ Matrix Camera::GetProjectionMatrix() {
 	return proj;
 }
 
+void Camera::drawSkybox() 
+{
+	glDepthMask(GL_FALSE);
+	glUseProgram(this->skybox->GetShader()->GetProgram());
+
+	Matrix world;
+	world.SetIdentity();
+	world = this->skybox->GetWorldMatrix() * this->GetViewMatrix() * this->GetProjectionMatrix();
+
+	if (this->skybox->GetShader()->GetUniforms().wvp_matrix != -1) {
+		glUniformMatrix4fv(this->skybox->GetShader()->GetUniforms().wvp_matrix, 1, GL_FALSE, world.m[0]);
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, this->skybox->GetModel()->m_VBO);
+	if( this->skybox->GetShader()->GetAttributes().position != -1 )
+	{	
+		glEnableVertexAttribArray( this->skybox->GetShader()->GetAttributes().position );
+		glVertexAttribPointer( this->skybox->GetShader()->GetAttributes().position, 3, GL_FLOAT, GL_FALSE,  sizeof(Vertex), 0);
+	}
+
+	glBindTexture(GL_TEXTURE_CUBE_MAP, this->skybox->GetTexture()->textureID);
+	glUniform1i(this->skybox->GetShader()->GetUniforms().texture, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->skybox->GetModel()->m_IBO);
+	glDrawElements(GL_TRIANGLES, this->skybox->GetModel()->m_indicesCount, GL_UNSIGNED_INT, 0);
+	
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDepthMask(GL_TRUE);
+}
+
 void Camera::draw(Object3D* object) 
 {
 	glUseProgram(object->GetShader()->GetProgram());
-
 
 	Matrix world;
 	world.SetIdentity();
@@ -76,3 +107,45 @@ void Camera::draw(Object3D* object)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+void Camera::update(float deltaTime) {
+	Vector3 camdir = Vector3(0, 0, 0);
+	Vector3 camrot = Vector3(0, 0, 0);
+
+	if (GetAsyncKeyState('W')) {
+		camdir.z = -1;
+	} else if (GetAsyncKeyState('S')) {
+		camdir.z = 1;
+	}
+
+	if (GetAsyncKeyState('A')) {
+		camdir.x = -1;
+	} else if (GetAsyncKeyState('D')) {
+		camdir.x = 1;
+	}
+
+	if (GetAsyncKeyState(37)) {
+		camrot.y = 1;
+	} else if (GetAsyncKeyState(39)) {
+		camrot.y = -1;
+	}
+
+	if (GetAsyncKeyState(38)) {
+		camrot.x = 1;
+	} else if (GetAsyncKeyState(40)) {
+		camrot.x = -1;
+	}
+	Vector4 dir;
+
+	dir.x = camdir.x * deltaTime;
+	dir.y = camdir.y * deltaTime;
+	dir.z = camdir.z * deltaTime;
+
+	dir = dir * this->GetWorldMatrix();
+
+	this->transform.position += Vector3(dir.x, dir.y, dir.z);
+	this->transform.rotation += Vector3(camrot.x * deltaTime, camrot.y * deltaTime, camrot.z * deltaTime);
+
+	this->skybox->transform.position = this->transform.position;
+}
+

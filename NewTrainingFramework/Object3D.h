@@ -10,13 +10,12 @@ struct Transform {
 
 class Object3D
 {
-private:
+protected:
     Texture* texture;
     Model*   model;
     Shaders* shader;
  
 public:
-   
     Transform transform;
     Object3D();
     virtual ~Object3D();

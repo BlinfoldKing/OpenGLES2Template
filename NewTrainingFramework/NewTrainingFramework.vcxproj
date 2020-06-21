@@ -96,6 +96,7 @@
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Shaders.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -109,6 +110,7 @@
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
@@ -116,6 +118,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.doc" />
+    <None Include="..\Resources\Shaders\CubeShader.fs" />
+    <None Include="..\Resources\Shaders\CubeShader.vs" />
+    <None Include="..\Resources\Shaders\DebugShader.fs" />
+    <None Include="..\Resources\Shaders\DebugShader.vs" />
     <None Include="..\Resources\Shaders\ModelShaderFS.fs" />
     <None Include="..\Resources\Shaders\ModelShaderVS.vs" />
     <None Include="..\Resources\Shaders\TriangleShaderFS.fs" />

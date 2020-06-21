@@ -9,6 +9,7 @@ public:
 	int width, height, bpp;
 	Texture();
 	~Texture();
-	void init(char* filename);
+	void load(char* filename);
+	void loadSkybox(char* paths[6]);
 };
 

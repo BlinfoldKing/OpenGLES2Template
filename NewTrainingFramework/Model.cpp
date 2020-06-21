@@ -41,13 +41,13 @@ void Model::init(char* filename)
 			);
 			verticesData[i] = v;
 
-			printf(debugFormat, i,
-				v.pos.x, v.pos.y, v.pos.z,
-				v.norm.x, v.norm.y, v.norm.z,
-				v.binorm.x, &v.binorm.y, v.binorm.z,
-				v.tgt.x, v.tgt.y, v.tgt.z,
-				v.uv.x, v.uv.y
-			);
+			//printf(debugFormat, i,
+			//	v.pos.x, v.pos.y, v.pos.z,
+			//	v.norm.x, v.norm.y, v.norm.z,
+			//	v.binorm.x, &v.binorm.y, v.binorm.z,
+			//	v.tgt.x, v.tgt.y, v.tgt.z,
+			//	v.uv.x, v.uv.y
+			//);
 		}
 		this->m_verticesCount = NrVertices;
 
@@ -65,11 +65,11 @@ void Model::init(char* filename)
 				&indicesdData[i + 2]
 			);
 
-			printf(debugFormat, i,
-				indicesdData[i],
-				indicesdData[i + 1],
-				indicesdData[i + 2]
-			);
+//			printf(debugFormat, i,
+//				indicesdData[i],
+//				indicesdData[i + 1],
+//				indicesdData[i + 2]
+//			);
 		}
 		this->m_indicesCount = NrIndices;
 
