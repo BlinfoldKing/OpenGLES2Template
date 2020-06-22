@@ -7,13 +7,21 @@ public:
 	struct Attributes
 	{
 		GLint position;
+		GLint normal;
 		GLint textureCoord;
 	};
 
 	struct Uniforms
 	{
 		GLint texture;
+		GLint skybox;
 		GLint wvp_matrix;
+		GLint model;
+		GLint camera;
+		GLint color;
+		GLint lightpos;
+		GLint lightcolor;
+		GLint ambientcolor;
 	};
 
 private:

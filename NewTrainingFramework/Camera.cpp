@@ -60,6 +60,7 @@ void Camera::drawSkybox()
 		glVertexAttribPointer( this->skybox->GetShader()->GetAttributes().position, 3, GL_FLOAT, GL_FALSE,  sizeof(Vertex), 0);
 	}
 
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, this->skybox->GetTexture()->textureID);
 	glUniform1i(this->skybox->GetShader()->GetUniforms().texture, 0);
 
@@ -85,6 +86,18 @@ void Camera::draw(Object3D* object)
 		glUniformMatrix4fv(object->GetShader()->GetUniforms().wvp_matrix, 1, GL_FALSE, world.m[0]);
 	}
 
+	if (object->GetShader()->GetUniforms().texture != -1) {
+		glUniform1i(object->GetShader()->GetUniforms().texture, 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, object->GetTexture()->textureID);
+	}
+
+	if (object->GetShader()->GetUniforms().skybox != -1) {
+		glUniform1i(object->GetShader()->GetUniforms().skybox, 1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, this->skybox->GetTexture()->textureID);
+	}
+
 	glBindBuffer(GL_ARRAY_BUFFER, object->GetModel()->m_VBO);
 	if( object->GetShader()->GetAttributes().position != -1 )
 	{	
@@ -92,13 +105,45 @@ void Camera::draw(Object3D* object)
 		glVertexAttribPointer( object->GetShader()->GetAttributes().position, 3, GL_FLOAT, GL_FALSE,  sizeof(Vertex), 0);
 	}
 
-	glBindTexture(GL_TEXTURE_2D, object->GetTexture()->textureID);
-	glUniform1i(object->GetShader()->GetUniforms().texture, 0);
 	if (object->GetShader()->GetAttributes().textureCoord != -1)
 	{
 		glEnableVertexAttribArray(object->GetShader()->GetAttributes().textureCoord);
 		glVertexAttribPointer(object->GetShader()->GetAttributes().textureCoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + sizeof(Vector3));
 	}
+
+	if (object->GetShader()->GetAttributes().normal != -1)
+	{
+		glEnableVertexAttribArray(object->GetShader()->GetAttributes().normal);
+		glVertexAttribPointer(object->GetShader()->GetAttributes().normal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (char*)0 + sizeof(Vector3) + sizeof(Vector2));
+	}
+
+	if (object->GetShader()->GetUniforms().model != -1)
+	{	
+		Matrix World4 = object->GetWorldMatrix();
+		glUniformMatrix4fv(object->GetShader()->GetUniforms().model, 1, GL_FALSE, World4.m[0]);
+	}
+
+	if (object->GetShader()->GetUniforms().camera != -1) {
+		glUniform3f(object->GetShader()->GetUniforms().camera, this->transform.position.x, this->transform.position.y, this->transform.position.z);
+	}
+
+	if (object->GetShader()->GetUniforms().color != -1) {
+		glUniform3f(object->GetShader()->GetUniforms().color, object->color.x, object->color.y, object->color.z);
+	}
+
+	if (object->GetShader()->GetUniforms().lightpos != -1) {
+		glUniform3f(object->GetShader()->GetUniforms().lightpos, this->light->transform.position.x, this->light->transform.position.y, this->light->transform.position.z);
+	}
+
+	if (object->GetShader()->GetUniforms().lightcolor != -1) {
+		glUniform3f(object->GetShader()->GetUniforms().lightcolor, this->light->color.x, this->light->color.y, this->light->color.z);
+	}
+
+	if (object->GetShader()->GetUniforms().ambientcolor != -1) {
+		glUniform3f(object->GetShader()->GetUniforms().ambientcolor, this->ambientColor.x, this->ambientColor.y, this->ambientColor.z);
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, object->GetModel()->m_VBO);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object->GetModel()->m_IBO);
 	glDrawElements(GL_TRIANGLES, object->GetModel()->m_indicesCount, GL_UNSIGNED_INT, 0);
@@ -106,6 +151,7 @@ void Camera::draw(Object3D* object)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
 void Camera::update(float deltaTime) {
@@ -143,7 +189,7 @@ void Camera::update(float deltaTime) {
 
 	dir = dir * this->GetWorldMatrix();
 
-	this->transform.position += Vector3(dir.x, dir.y, dir.z);
+	this->transform.position += Vector3(dir.x, dir.y, dir.z) * 3;
 	this->transform.rotation += Vector3(camrot.x * deltaTime, camrot.y * deltaTime, camrot.z * deltaTime);
 
 	this->skybox->transform.position = this->transform.position;

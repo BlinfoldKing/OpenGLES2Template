@@ -16,6 +16,7 @@ protected:
     Shaders* shader;
  
 public:
+	Vector3 color;
     Transform transform;
     Object3D();
     virtual ~Object3D();

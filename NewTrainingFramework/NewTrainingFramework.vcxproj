@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="NewTrainingFramework.cpp" />
     <ClCompile Include="Object3D.cpp" />
@@ -106,6 +107,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="Rectangle.h" />
@@ -122,6 +124,10 @@
     <None Include="..\Resources\Shaders\CubeShader.vs" />
     <None Include="..\Resources\Shaders\DebugShader.fs" />
     <None Include="..\Resources\Shaders\DebugShader.vs" />
+    <None Include="..\Resources\Shaders\LightSource.fs" />
+    <None Include="..\Resources\Shaders\LightSource.vs" />
+    <None Include="..\Resources\Shaders\ModelEnvShader.fs" />
+    <None Include="..\Resources\Shaders\ModelEnvShader.vs" />
     <None Include="..\Resources\Shaders\ModelShaderFS.fs" />
     <None Include="..\Resources\Shaders\ModelShaderVS.vs" />
     <None Include="..\Resources\Shaders\TriangleShaderFS.fs" />

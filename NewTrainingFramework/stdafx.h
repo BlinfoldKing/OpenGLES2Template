@@ -14,5 +14,6 @@
 #include "Rectangle.h"
 #include "Object3D.h"
 #include "Camera.h"
+#include "Light.h"
 
 // TODO: reference additional headers your program requires here

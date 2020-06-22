@@ -12,6 +12,8 @@ Shaders			myShaders;
 Camera*			camera;
 Object3D*		woman1;
 Object3D*		woman2;
+Object3D*		ball;
+Light*			light;
 Rect*			rect;
 int scene = 1;
 
@@ -70,6 +72,27 @@ int Init( ESContext *esContext )
 	camera->skybox->SetModel(skyboxModel);
 	camera->skybox->SetShader(cubeVertex, cubeFragment);
 
+	char* ballText = "../Resources/Textures/Rock.tga";
+	char* ballModel = "../Resources/Models/Ball.nfg";
+	vertexpath = "../Resources/Shaders/ModelEnvShader.vs";
+	fragmentpath = "../Resources/Shaders/ModelEnvShader.fs";
+	ball = new Object3D();
+	ball->SetModel(ballModel);
+	ball->SetTexture(ballText);
+	ball->SetShader(vertexpath, fragmentpath);
+	ball->transform.scale = Vector3(0.01, 0.01, 0.01);
+
+	vertexpath = "../Resources/Shaders/LightSource.vs";
+	fragmentpath = "../Resources/Shaders/LightSource.fs";
+	light = new Light();
+	light->SetShader(vertexpath, fragmentpath);
+	light->SetModel(skyboxModel);
+	light->transform.position = Vector3(1, 1, 0);
+	light->transform.scale = Vector3(0.1, 0.1, 0.1);
+	light->color = Vector3(1, 1, 0);
+	
+	camera->light = light;
+	camera->ambientColor = Vector3(0.1, 0.1, 0.1);
 //	Vector3 positions[4] = {
 //		Vector3(-0.5, 0.5, 0.0),
 //		Vector3(0.5, 0.5, 0.0),
@@ -98,7 +121,12 @@ void Draw( ESContext *esContext )
 		camera->draw(woman1);
 		camera->draw(woman2);
 		break;
+	case 2:
+		camera->draw(light);
+		camera->draw(ball);
+		break;
 	default:
+		camera->draw(ball);
 		break;
 	}
 //rect->draw(myShaders);
@@ -108,6 +136,7 @@ void Draw( ESContext *esContext )
 
 void Update( ESContext *esContext, float deltaTime )
 {
+	ball->transform.rotation.y += deltaTime;
 	woman1->transform.rotation.y += deltaTime;
 	woman2->transform.rotation.z += deltaTime;
 	camera->update(deltaTime);
